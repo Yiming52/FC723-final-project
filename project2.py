@@ -1,6 +1,8 @@
 class SeatBookingSystem:
     def __init__(self):
+        # Initialize seating arrangement and booking records
         self.seats = [['F' for _ in range(6)] for _ in range(80)]
+        self.bookings = {}  # Dictionary to store seat identifiers and customer details
         for i in range(80):
             if i in [26, 27]:
                 for j in range(6):
@@ -10,30 +12,46 @@ class SeatBookingSystem:
                     self.seats[i][j] = 'X'
 
     def show_seating(self):
+        """Display the current state of the seating arrangement."""
         for row in self.seats:
             print(' '.join(row))
 
     def check_availability(self, row, seat):
+        """Check if a specific seat is available."""
         if self.seats[row-1][seat] == 'F':
             print(f"Seat {row}{chr(65+seat)} is available.")
         else:
             print(f"Seat {row}{chr(65+seat)} is not available.")
 
     def book_seat(self, row, seat):
+        """Book a seat if it is free and store the customer details."""
         if self.seats[row-1][seat] == 'F':
+            passport = input("Enter passport number: ")
+            first_name = input("Enter first name: ")
+            last_name = input("Enter last name: ")
             self.seats[row-1][seat] = 'R'
-            print(f"Seat {row}{chr(65+seat)} has been booked.")
+            seat_id = f"{row}{chr(65+seat)}"
+            self.bookings[seat_id] = {
+                'passport': passport,
+                'first_name': first_name,
+                'last_name': last_name,
+            }
+            print(f"Seat {seat_id} has been booked.")
         else:
             print(f"Seat {row}{chr(65+seat)} cannot be booked.")
 
     def free_seat(self, row, seat):
-        if self.seats[row-1][seat] == 'R':
+        """Free a previously booked seat and remove the booking details."""
+        seat_id = f"{row}{chr(65+seat)}"
+        if seat_id in self.bookings:
+            del self.bookings[seat_id]
             self.seats[row-1][seat] = 'F'
-            print(f"Seat {row}{chr(65+seat)} has been freed.")
+            print(f"Seat {seat_id} has been freed.")
         else:
             print(f"Seat {row}{chr(65+seat)} is not currently booked.")
 
     def menu(self):
+        """Display the menu and handle user input."""
         while True:
             print("\nMenu:")
             print("1. Check availability of seat")
