@@ -1,6 +1,5 @@
 import string
 
-
 class SeatBookingSystem:
     def __init__(self):
         """
@@ -8,15 +7,17 @@ class SeatBookingSystem:
         'F' indicates a free seat, 'R' indicates a reserved seat,
         'X' indicates an aisle, and 'S' indicates a storage area.
         """
-        self.seats = [['F' for _ in range(6)] for _ in range(80)]
+        self.seats = [['F' for _ in range(7)] for _ in range(80)]
         self.bookings = {}  # Dictionary to store seat identifiers and customer details
+
+        # Set 'X' for aisle seats in the 4th column
         for i in range(80):
-            if i in [26, 27]:
-                for j in range(6):
-                    self.seats[i][j] = 'S'
-            elif i % 4 == 3:
-                for j in range(6):
-                    self.seats[i][j] = 'X'
+            self.seats[i][3] = 'X'
+
+        # Set 'S' for storage seats in the 77th and 78th rows
+        for j in range(7):
+            self.seats[76][j] = 'S'
+            self.seats[77][j] = 'S'
 
     def show_seating(self):
         """Display the current state of the seating arrangement."""
